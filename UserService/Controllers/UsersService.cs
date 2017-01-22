@@ -38,7 +38,7 @@ namespace UserService.Controllers
             return user;
         }
 
-        public string CreateUser(User user)
+        public string CreateUser(UserPost user)
         {
             if (user == null)
             {

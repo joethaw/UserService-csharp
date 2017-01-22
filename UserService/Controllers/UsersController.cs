@@ -5,7 +5,9 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Http.Description;
 using System.Web.Http.Results;
+using Swashbuckle.Swagger.Annotations;
 using UserService.Models;
 
 namespace UserService.Controllers
@@ -23,7 +25,16 @@ namespace UserService.Controllers
             _service = new UsersService(repo);
         }
 
+        /// <summary>
+        /// Get all users
+        /// </summary>
+        /// <remarks>
+        /// Returns all users
+        /// </remarks>
+        /// <returns></returns>
+        /// <response code="200">Successfully get all users</response>
         // GET api/users
+        [ResponseType(typeof(IEnumerable<User>))]
         public IEnumerable<User> Get()
         {
             try
@@ -38,7 +49,18 @@ namespace UserService.Controllers
             }
         }
 
-        // GET api/users/{id}
+        /// <summary>
+        /// Get a user by Id
+        /// </summary>
+        /// <remarks>
+        /// Returns the user with that Id
+        /// </remarks>
+        /// <param name="id">Id of the user</param>
+        /// <returns></returns>
+        /// <response code="200">Successfully get the user with that Id</response>
+        /// <response code="404">User not found</response>
+        // GET api/users/{id
+        [ResponseType(typeof(User))]
         public User Get(string id)
         {
             try
@@ -58,9 +80,20 @@ namespace UserService.Controllers
             return null;
         }
 
+        /// <summary>
+        /// Create a user
+        /// </summary>
+        /// <remarks>
+        /// Returns Id and url of the created user
+        /// </remarks>
+        /// <param name="user">User to be created</param>
+        /// <returns></returns>
+        /// <response code="201">Successfully created the user</response>
+        /// <response code="400">Bad request</response>
         // POST api/users
+        [ResponseType(typeof(PostResponse))]
         [ValidateModel]
-        public CreatedNegotiatedContentResult<PostResponse> Post([FromBody]User user)
+        public CreatedNegotiatedContentResult<PostResponse> Post([FromBody]UserPost user)
         {
             try
             {
@@ -84,6 +117,17 @@ namespace UserService.Controllers
             return null;
         }
 
+        /// <summary>
+        /// Update a user
+        /// </summary>
+        /// <remarks>
+        /// Update a user
+        /// </remarks>
+        /// <param name="id">Id of the user</param>
+        /// <param name="user">User</param>
+        /// <response code="204">Successfully updated the user</response>
+        /// <response code="400">Bad request</response>
+        /// <response code="404">User not found</response>
         // PUT api/users/{id}
         [ValidateModel]
         public void Put(string id, [FromBody]UserPut user)

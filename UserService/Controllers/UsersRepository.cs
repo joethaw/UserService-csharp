@@ -13,7 +13,7 @@ namespace UserService.Controllers
     {
         IEnumerable<User> GetUsers();
         User GetUser(string id);
-        string CreateUser(User user);
+        string CreateUser(UserPost user);
         bool UpdateUser(string id, UserPut userInfo);
     }
 
@@ -39,16 +39,18 @@ namespace UserService.Controllers
             return _userDict[id];
         }
 
-        public string CreateUser(User user)
+        public string CreateUser(UserPost user)
         {
+            var newUser = new User();
+
             // generate user id
             string id = Guid.NewGuid().ToString();
 
-            user.Id = id;
-            user.Name = user.Name;
-            user.Points = user.Points;
+            newUser.Id = id;
+            newUser.Name = user.Name;
+            newUser.Points = user.Points;
 
-            if (!_userDict.TryAdd(id, user))
+            if (!_userDict.TryAdd(id, newUser))
             {
                 throw new Exception("Could not add user.");
             }
